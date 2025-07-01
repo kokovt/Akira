@@ -4,6 +4,7 @@ import { ParsedQs } from "qs";
 import { Message } from "ollama";
 import { Server } from "http";
 import dotenv from "dotenv";
+import handleRecord from "../voice";
 
 dotenv.config();
 const PORT = process.env.PORT || 4000;
@@ -35,7 +36,7 @@ export default async function setupExpress() {
 
     if (API_TYPE == "ollama") {
       try {
-        res.send(await ollama_api(0, "\n", MAX_CONTENT, false));
+        res.send(await ollama_api(0, undefined, MAX_CONTENT, false));
       } catch (err) {
         res.send("There was an error!");
       }
@@ -76,3 +77,8 @@ export function clearHistory() {
 export function popHistory() {
   history.pop();
 }
+
+export function setHistory(inHistory: Array<Message>) {
+  history = inHistory;
+}
+

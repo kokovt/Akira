@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" data-webtui-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KokoChat</title>
+    <script src="./js/gravatar.js" defer></script>
+    <script src="./js/index.js" defer></script>
+    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="./css/webtui.css" />
+  </head>
+  <body>
+    <button id="toggle-sidebar" onclick="toggleSidebar()">
+      <img
+        id="toggle-sidebar-img"
+        src="./image/close_sidebar.svg"
+        class="black-to-white flipX"
+      />
+    </button>
+    <div id="sidebar">
+      <div id="header">
+        <h1 id="bot-name">Akira</h1>
+      </div>
+      <button id="new-chat">New chat</button>
+      <input id="searchbar" type="text" placeholder="Search your chats..." />
+      <div id="user-container">
+        <img src="" alt="" srcset="" id="user-img" />
+        <div id="username-container">
+          <p id="username">Username</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="main-chat">
+        <div id="input-holder">
+            <div id="message-holder">
+                <textarea id="message-box" type="text" placeholder="Type a message...."></textarea>
+            </div>
+        </div>
+        <div id="scroller">
+            <div id="chat-holder"></div>
+        </div>
+    </div>
+  </body>
+</html>

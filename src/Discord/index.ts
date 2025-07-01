@@ -1,65 +1,117 @@
-import { ChannelType, Client, Partials } from "discord.js";
-import handleTerminal from "../terminal";
-import { addToHistory, getHistory, popHistory } from "../API/api_controller";
+import { ChannelType, Client, Partials, ActivityType, Message, CommandInteraction, GatewayIntentBits, AutocompleteInteraction, MessageFlags, BitFieldResolvable, MessageFlagsString, ClientEvents } from "discord.js";
+import { addToHistory } from "../API/api_controller";
 import ollama_api from "../API/ollama/ollama_api";
-
-
-
-let options = {
-  includeThinking: false
-}; // Make this persist.
+import { glob } from "glob";
+import DATABASE from "../database/dbclass";
 
 // This is going to be simple cause for now I don't think I am going to handle commands.
 export default async function handleDiscord() {
-  const client = new Client({
-    intents: ["DirectMessages"],
-    partials: [Partials.Channel]
+  if (!process.env.BOT_TOKEN) return;
+  const APPOLYON = new Apollyon(process.env.BOT_TOKEN, {
+    intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.Guilds],
+    partials: [Partials.Channel, Partials.Message]
   });
-
-  client.on('messageCreate', async (message) => {
-    if (message.author.bot || message.channel.type !== ChannelType.DM) return;
-
-    if (message.author.username !== process.env.OWNER_DISCORD) return;
-
-    const response_message = await message.reply("The bot is generating...");
-
-    addToHistory({ role: "user", content: message.content });
-
-    console.log(JSON.stringify(getHistory()));
-
-    const RESPONSE = await ollama_api(0, "<EOF>", 4096, true); // Update this to be better.
-
-    addToHistory({
-      role: "assistant",
-      content: RESPONSE
-    });
-
-    let messageContent = "";
-
-    messageContent += RESPONSE;
-
-    let split_array = splitIntoChunks(messageContent);
-
-    for (let i = 0; i < split_array.length; i++) {
-      response_message.edit(messageContent);
-    }
-  });
-
-  client.on("ready", () => {
-    console.log("[DISCORD] Logged in as " + client.user?.username);
-    handleTerminal();
-  })
-
-  client.login(process.env.BOT_TOKEN);
 }
 
-function splitIntoChunks(message: string) {
-  const numChunks = Math.ceil(message.length / 2000);
-  const chunks = new Array(numChunks);
+export class Apollyon {
+  CLIENT: Client;
+  commands: Array<command>;
+  db: DATABASE;
+  constructor(token: string, options: {
+    intents?: Array<GatewayIntentBits>,
+    partials?: Array<Partials>
+  }) {
+    this.CLIENT = new Client({
+      intents: options.intents || [],
+      partials: options.partials || []
+    });
 
-  for (let i = 0, o = 0; i < numChunks; i++, o += 2000) {
-    chunks[i] = message.substring(o);
+    this.commands = [];
+    this.#handleEvents();
+    this.CLIENT.login(token);
+    this.db = new DATABASE();
   }
 
-  return chunks;
+
+  async #handleEvents() {
+    const EVENTS = await glob(`${process.cwd().replaceAll("\\", "/")}/dist/Discord/events/**/*.js`);
+
+    for (let i = 0; i < EVENTS.length; i++) {
+      const EVENT: event = require(EVENTS[i]).default;
+
+      this.CLIENT.on(EVENT.event, (...args) => {
+        EVENT.function(this, args);
+      });
+    }
+  }
+}
+
+
+// ###########
+// ## TYPES ##
+// ###########
+export type event = {
+  event: string,
+  function: (APOLLYON: Apollyon, args: Array<any>) => Promise<any>
+}
+
+export type command = {
+  interaction: {
+    type?: 1 | 2 | 3;
+    name: string;
+    name_localizations?: { [id: string]: string };
+    description: string;
+    description_localizations?: {};
+    options?: Array<commandOption>;
+    default_member_permissions?: string;
+    default_permission?: boolean;
+  };
+  flags: BitFieldResolvable<Extract<MessageFlagsString, 'Ephemeral'>, MessageFlags.Ephemeral> | undefined;
+  run: (Apollyon: Apollyon, interaction: CommandInteraction) => Promise<any>;
+  autocomplete?: (interaction: AutocompleteInteraction) => Promise<any>;
+}
+
+export type commandOption = {
+  type: number;
+  name: string;
+  name_localizations?: { [id: string]: string };
+  description: string;
+  description_localizations?: { [id: string]: string };
+  required?: boolean;
+  choices?: Array<{
+    name: string;
+    name_localizations?: { [id: string]: string };
+
+    value: number | string;
+  }>;
+  options?: Array<commandOption>;
+  channel_type?: { [id: string]: string };
+  min_value?: number;
+  max_value?: number;
+  min_length?: number;
+  max_length?: number;
+  autocomplete?: boolean;
+}
+
+export type guild = {
+  logChannelID?: string
+}
+
+export type user = {
+  ai_character?: string
+}
+
+
+export const commandOptionTypes = {
+  SUB_COMMAND: 1,
+  SUB_COMMAND_GROUP: 2,
+  STRING: 3,
+  INTEGER: 4,
+  BOOLEAN: 5,
+  USER: 6,
+  CHANNEL: 7,
+  ROLE: 8,
+  MENTIONABLE: 9,
+  NUMBER: 10,
+  ATTATCHMENTS: 11
 }

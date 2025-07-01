@@ -1,17 +1,39 @@
 {
   "dependencies": {
+    "@discordjs/voice": "^0.18.0",
+    "@webtui/css": "^0.1.2",
     "discord.js": "^14.14.1",
-    "dotenv": "^16.5.0",
+    "dotenv": "^16.6.1",
+    "electron": "^36.2.1",
     "express": "^5.1.0",
-    "glob": "^11.0.2",
-    "ollama": "^0.5.15"
+    "glob": "^11.0.3",
+    "node-mic-record": "^0.0.1",
+    "nodejs-whisper": "^0.2.6",
+    "ollama": "^0.5.16"
   },
   "devDependencies": {
     "@types/express": "^5.0.2",
-    "@types/node": "^22.15.18"
+    "@types/node": "^22.15.18",
+    "concurrently": "^9.2.0",
+    "typescript": "^5.8.3"
   },
   "main": "./dist/index.js",
   "scripts": {
-    "run": "tsc && node ."
-  }
+    "run": "tsc && electron ."
+  },
+  "name": "akira",
+  "version": "0.2.1",
+  "description": "My personal AI assistant.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kokovt/Akira.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kokovt/Akira/issues"
+  },
+  "homepage": "https://github.com/kokovt/Akira#readme"
 }

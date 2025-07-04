@@ -1,45 +1,77 @@
 <!DOCTYPE html>
+
+<!-- 
+  This is the main HTML document for the Electron application's renderer process.
+  It defines the static structure of the chat interface, which is then made
+  interactive by the linked JavaScript files. The `data-webtui-theme="dark"`
+  attribute suggests it uses a UI library called "WebTUI" with a dark theme.
+-->
 <html lang="en" data-webtui-theme="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KokoChat</title>
-    <script src="./js/gravatar.js" defer></script>
-    <script src="./js/index.js" defer></script>
-    <link rel="stylesheet" href="./css/index.css" />
-    <link rel="stylesheet" href="./css/webtui.css" />
-  </head>
-  <body>
-    <button id="toggle-sidebar" onclick="toggleSidebar()">
-      <img
-        id="toggle-sidebar-img"
-        src="./image/close_sidebar.svg"
-        class="black-to-white flipX"
-      />
-    </button>
-    <div id="sidebar">
-      <div id="header">
-        <h1 id="bot-name">Akira</h1>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KokoChat</title>
+
+  <!-- Scripts -->
+  <!-- gravatar.js handles fetching a user's profile picture from the Gravatar service. -->
+  <script src="./js/gravatar.js" defer></script>
+  <!-- index.js is the main script for the renderer process, handling UI logic, IPC calls, and DOM manipulation. -->
+  <script src="./js/index.js" defer></script>
+
+  <!-- Stylesheets -->
+  <!-- index.css contains custom styles specific to this application's layout and appearance. -->
+  <link rel="stylesheet" href="./css/index.css" />
+  <!-- webtui.css is a CSS framework or UI library providing pre-styled components. -->
+  <link rel="stylesheet" href="./css/webtui.css" />
+</head>
+
+<body>
+  <!-- A button positioned to toggle the visibility of the sidebar. -->
+  <button id="toggle-sidebar" onclick="toggleSidebar()">
+    <img id="toggle-sidebar-img" src="./image/close_sidebar.svg" class="black-to-white flipX" />
+  </button>
+  <!-- The main sidebar for navigation, chat history, and user information. -->
+  <div id="sidebar">
+    <div id="header">
+      <!-- Header section of the sidebar, displaying the bot's name. -->
+      <h1 id="bot-name">Akira</h1>
+    </div>
+    <!-- A button to start a new conversation. -->
+    <!-- TODO: Add functionality. -->
+    <button id="new-chat">New chat</button>
+
+    <!-- An input field for searching through past conversations. -->
+    <!-- TODO: Add functionality. -->
+    <input id="searchbar" type="text" placeholder="Search your chats..." />
+
+    <!-- Container at the bottom of the sidebar for user details. -->
+    <div id="user-container">
+      <!-- The user's profile picture, populated by gravatar.js. -->
+      <img src="" alt="" srcset="" id="user-img" />
+      <!-- A container for the username text. -->
+      <div id="username-container">
+        <p id="username">Username</p>
       </div>
-      <button id="new-chat">New chat</button>
-      <input id="searchbar" type="text" placeholder="Search your chats..." />
-      <div id="user-container">
-        <img src="" alt="" srcset="" id="user-img" />
-        <div id="username-container">
-          <p id="username">Username</p>
-        </div>
-      </div>
+    </div>
+  </div>
+
+  <!-- The main content area where the chat conversation is displayed. -->
+  <div id="main-chat">
+    <!-- This is the scrollable container that holds the chat messages. -->
+    <div id="scroller">
+      <!-- Chat messages will be dynamically added here by index.js. -->
+      <div id="chat-holder"></div>
     </div>
 
-    <div id="main-chat">
-        <div id="input-holder">
-            <div id="message-holder">
-                <textarea id="message-box" type="text" placeholder="Type a message...."></textarea>
-            </div>
-        </div>
-        <div id="scroller">
-            <div id="chat-holder"></div>
-        </div>
+    <!-- A fixed container at the bottom for the message input field. -->
+    <div id="input-holder">
+      <div id="message-holder">
+        <!-- The textarea where the user types their messages. -->
+        <textarea id="message-box" type="text" placeholder="Type a message...."></textarea>
+      </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

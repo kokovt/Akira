@@ -1,19 +1,29 @@
+/**
+ * @file Custom Application Styles
+ * @summary This file contains all the custom CSS rules for the layout, positioning,
+ * and appearance of the Electron chat application's UI components.
+ */
+
+/* --- Global Resets & Base Styles --- */
 html,
 body {
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100vw;
+    /* Prevents scrollbars on the main body, as scrolling is handled by specific containers. */
     overflow: hidden;
+    /* Establishes a flexbox context for top-level layout. */
     display: flex;
 }
 
+/* A simple style for inline span elements, giving them a background and padding. */
 span {
     background-color: var(--background0);
     padding: 0 1ch;
 }
 
-
+/* Sets a default white color for common text elements against the dark background. */
 p,
 pre,
 h1,
@@ -22,24 +32,36 @@ h3 {
     color: white
 }
 
+
+/* --- Utility Classes --- */
+
+/**
+ * A filter used to turn black icons/images into white ones.
+ * This is useful for theming SVG icons to match the dark theme.
+ */
 .black-to-white {
     filter: invert(100%) sepia(46%) saturate(0%) hue-rotate(9deg) brightness(100%) contrast(102%);
 }
 
+/* A simple utility to flip an element horizontally. */
 .flipX {
     transform: scaleX(-1);
 }
 
+
+/* A generic header style used within chat bubbles. */
 .header {
     display: flex;
     justify-content: space-between;
 }
 
+/* --- Sidebar Styles --- */
 #sidebar {
     position: absolute;
     width: 300px;
     height: 100%;
     background-color: rgb(37, 37, 37);
+    /* Transitions can be added here for smoother open/close animations. */
 }
 
 #searchbar {
@@ -54,7 +76,7 @@ h3 {
     height: 30px;
     position: absolute;
     background: none;
-    top: 15px;
+    /* Ensures the toggle button appears on top of the sidebar content. */
     z-index: 1;
 }
 
@@ -76,21 +98,24 @@ h3 {
     left: 10px;
 }
 
-#user-img {
-    border-radius: 50%;
-    padding-right: 10px;
-    padding-left: 20px;
-    height: 50px;
-}
+/* --- User Info Container (Bottom of Sidebar) --- */
 
 #user-container {
     height: 75px;
     position: relative;
     width: calc(100% - 20px);
+    /* Pins the container to the bottom area of the sidebar. */
     top: calc(100% - 225px);
     display: flex;
     align-items: center;
     left: 10px;
+}
+
+#user-img {
+    border-radius: 50%;
+    padding-right: 10px;
+    padding-left: 20px;
+    height: 50px;
 }
 
 #user-container:hover {
@@ -99,14 +124,18 @@ h3 {
 }
 
 
+/* --- Main Chat Area Styles --- */
+
 #main-chat {
     position: absolute;
     height: 100%;
     left: 300px;
     width: calc(100% - 300px);
     background-color: rgb(0, 0, 0);
+    /* A transition on `left` and `width` would animate the sidebar toggle. */
 }
 
+/* The fixed container at the bottom holding the message input box. */
 #input-holder {
     position: absolute;
     height: 240px;
@@ -115,8 +144,10 @@ h3 {
     background-color: rgb(37, 37, 37);
 }
 
+/* A wrapper to center the message box within the input holder. */
 #message-holder {
     position: relative;
+    /* The classic horizontal centering trick. */
     left: 50%;
     transform: translateX(-50%);
     height: calc(100% - 20px);
@@ -125,18 +156,31 @@ h3 {
 
 }
 
+/* The actual textarea for user input. */
 #message-box {
     width: 100%;
     height: 100%;
     background-color: rgb(15, 15, 15);
     resize: none;
+    /* Disables user resizing of the textarea. */
     color: white
 }
 
+/* --- Chat Message Scroller --- */
+
+/**
+ * This is the container that holds all the chat messages.
+ * It's styled to create the classic chat interface behavior.
+ */
 #scroller {
+    /* This is the key to a "bottom-up" chat view. New items added to the
+     DOM will appear at the bottom, and the scrollbar starts at the bottom. */
     flex-direction: column-reverse;
+    /* Hides the default browser scrollbar for a cleaner look. */
     scrollbar-width: none;
+    /* Constrains the height to the area above the input holder. */
     max-height: calc(100% - 240px);
+    /* Enables scrolling when the content overflows the max-height. */
     overflow: auto;
     display: flex;
 }

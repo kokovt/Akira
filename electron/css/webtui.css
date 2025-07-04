@@ -1,4 +1,29 @@
+/**
+ * @file Main CSS Entry Point & Layer Definition
+ * @summary This file establishes the foundational CSS architecture for the application.
+ * @description It utilizes CSS Cascade Layers (`@layer`) to create a structured and
+ * predictable styling system. It then imports the full stylesheet from the
+ * WebTUI CSS library, which provides the base styles for the UI components
+ * seen in the application.
+ */
+
+/**
+ * Defines the cascade layers for the entire application's CSS.
+ * By defining the order here, we gain explicit control over style precedence,
+ * making it easier to manage and override styles.
+ * The order is significant:
+ * 1. `base`: Intended for resets, default element styles (e.g., body, h1).
+ * 2. `utils`: For utility classes (e.g., .text-center, .p-4) and, in this case, the imported library.
+ * 3. `components`: For custom application-specific component styles (e.g., .chat-bubble, .sidebar-user).
+ * Styles in `components` will override styles in `utils` and `base`, regardless of selector specificity.
+ */
 @layer base, utils, components;
 
+/**
+ * Imports the entire WebTUI CSS library.
+ * This library provides a set of pre-styled components and utility classes
+ * that are used throughout the application's HTML to build the user interface.
+ * The styles from this import will form the basis of the application's look and feel.
+ */
 /* Utils */
 @import "@webtui/css/dist/full.css";

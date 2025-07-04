@@ -106,10 +106,15 @@ const messageCreate: event = {
 async function sendChunkedReply(message: Message, content: string) {
   if (!content) return;
 
-  // Use .match() to split the string into an array of chunks.
-  const chunks = content.match(/[\s\S]{1,1999}/g) || [];
-  if (chunks.length = 0) return;
+  if(content.length <= 1999 && message.channel.isSendable()) {
+    await message.channel.send(content);
+    return;
+  }
 
+  // Use .match() to split the string into an array of chunks.
+  const chunks = content.match(/.{1,1999}/g);
+  if(!chunks) return;
+  if(chunks.length = 0) return;
 
   // Send the chunks as messages in the channel.
   for (let i = 0; i < chunks.length; i++) {

@@ -19,7 +19,9 @@
   },
   "main": "./dist/index.js",
   "scripts": {
-    "run": "tsc && electron ."
+    "build": "tsc",
+    "start": "electron .",
+    "dev": "tsc && electron ."
   },
   "name": "akira",
   "version": "0.2.1",

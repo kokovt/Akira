@@ -123,3 +123,9 @@ A simple script is included to validate a Discord bot token without running the 
 ```bash\
 node discordtest.js --token=YOUR_DISCORD_BOT_TOKEN_HERE
 ```
+
+---
+
+## 📜 License
+
+This project is licensed under the GNU General Public v3.0 License. See the [LICENSE](LICENSE) file for details.

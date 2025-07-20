@@ -5,3 +5,4 @@ dist/
 *.wav
 *.wav.txt
 @webtui
+sounds/

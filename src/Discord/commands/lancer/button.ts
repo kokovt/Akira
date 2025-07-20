@@ -15,7 +15,7 @@ const BUTTON: command = {
  */
   interaction: {
     name: "button",
-    description: "button"
+    description: "button",
   },
 
   /**
@@ -52,7 +52,7 @@ const BUTTON: command = {
         }
       });
 
-      const resource = createAudioResource(`${process.cwd().replaceAll("\\", "/")}/rahh.mp3`);
+      const resource = createAudioResource(`${process.cwd().replaceAll("\\", "/")}/sounds/splat.mp3`);
       player.play(resource);
 
       // An audio resource is created from a local MP3 file.
